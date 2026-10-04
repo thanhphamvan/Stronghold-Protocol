@@ -95,7 +95,62 @@ export function operatorNames(root = ROOT) {
   return names;
 }
 
-/** Every catalog of aldus/i18n/locales, by locale, with the operator names added (a catalog's own entry wins). */
+/** The battles of a multi-round bounty card, and the numeral the server writes (server/match/choices.js). */
+export const BOUNTY_BATTLES = 2;
+const BOUNTY_NUMERAL = ['', '一', '两', '三', '四', '五'];
+const BOUNTY_SOURCE = /(?:之后的|后续的?)每场作战/g;
+
+/**
+ * The text of a multi-round bounty card as the server sends it. The data says "之后的每场作战…" (every battle after this);
+ * the server makes the card last BOUNTY_BATTLES battles and says so ("接下来两场作战…", bountyText of
+ * server/match/choices.js). So each such entry gets a second one for the server's text. Its translation has the
+ * phrase "in every battle after this" (i18n.test.js holds that), which becomes "in the next 2 battles".
+ * @returns {[string, string] | null} the key and the translation of the second entry
+ */
+export function bountyVariant(key, translation) {
+  if (key.search(BOUNTY_SOURCE) < 0) return null;
+  const battles = `${BOUNTY_BATTLES} battles`;
+  return [
+    key.replace(BOUNTY_SOURCE, `接下来${BOUNTY_NUMERAL[BOUNTY_BATTLES] || BOUNTY_BATTLES}场作战`),
+    translation.replace(/(in )<@ba\.vdown>every<\/> battle after this/gi, `$1<@ba.vup>the next ${battles}</>`).replace(/(in )every battle after this/gi, `$1the next ${battles}`),
+  ];
+}
+
+/**
+ * The text of the game data for one locale: every file of aldus/i18n/locales/<locale>/ (`{ text: { source: translation } }`),
+ * in the order of their names. The first file that has a key wins, so `game.json` (the text of the mode, translated
+ * here) wins over `official.json` (the text of the official English client). A key is the text as the page shows it, without white space at its ends.
+ */
+export function gameTextCatalog(locale) {
+  const dir = path.join(I18N_DIR, 'locales', locale);
+  const out = {};
+  if (!fs.existsSync(dir)) return out;
+  for (const f of fs.readdirSync(dir).filter((n) => n.endsWith('.json')).sort()) {
+    const { text } = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    if (!text || typeof text !== 'object') throw new Error(`aldus/i18n/locales/${locale}/${f}: a file of game text needs "text"`);
+    for (const [k, v] of Object.entries(text)) {
+      const key = k.trim();
+      if (key && typeof v === 'string' && !Object.hasOwn(out, key)) out[key] = v.trim();
+    }
+  }
+  for (const [k, v] of Object.entries(out)) {
+    const variant = bountyVariant(k, v);
+    if (variant && !Object.hasOwn(out, variant[0])) out[variant[0]] = variant[1];
+  }
+  return out;
+}
+
+/**
+ * A translation with the quotation marks of the keyboard. The fonts of the game have no Latin form of “ ” ‘ ’: the
+ * page would take them from its Chinese font, which draws each one as wide as a Chinese character.
+ */
+export const plainQuotes = (text) => text.replace(/[\u201c\u201d]/g, '"').replace(/[\u2018\u2019]/g, "'");
+const mapValues = (obj, fn) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, fn(v)]));
+
+/**
+ * Every catalog of aldus/i18n/locales, by locale: `messages` (the operator names of the game data, then the catalog's
+ * own messages, which win), `text` (the text of the game data, gameTextCatalog) and `patterns`.
+ */
 export function buildCatalogs(root = ROOT) {
   const names = operatorNames(root);
   const out = {};
@@ -103,7 +158,12 @@ export function buildCatalogs(root = ROOT) {
     const cat = JSON.parse(fs.readFileSync(path.join(I18N_DIR, 'locales', f), 'utf8'));
     if (!cat.locale || typeof cat.messages !== 'object') throw new Error(`aldus/i18n/locales/${f}: a catalog needs "locale" and "messages"`);
     for (const [re] of cat.patterns || []) new RegExp(re);
-    out[cat.locale] = { name: cat.name || cat.locale, messages: { ...names, ...cat.messages }, patterns: cat.patterns || [] };
+    out[cat.locale] = {
+      name: cat.name || cat.locale,
+      messages: mapValues({ ...names, ...cat.messages }, plainQuotes),
+      text: mapValues(gameTextCatalog(cat.locale), plainQuotes),
+      patterns: (cat.patterns || []).map(([re, to]) => [re, plainQuotes(to)]),
+    };
   }
   return out;
 }

@@ -20,7 +20,7 @@ The art is in a bucket (section "The art").
 | `WS-EVENTS.md` | What the client and the game server send each other during a game, with measured sizes: the map for the socket backend. |
 | `WS-STATE.md` | For each client message: the state that changes in the backend, how a Durable Object would keep it, and the answer (`send()` or `broadcast()`). |
 | `worker/` | The socket backend, a prototype: a Rust Cloudflare Worker with one Durable Object that runs the original match engine. Its own `README.md` has the build, the tests and the limits. |
-| `i18n/` | The second language of the page: an English catalog for the interface text, a runtime that changes the text on the page, and a tool that shows the coverage. English is the default. |
+| `i18n/` | The second language of the page: English catalogs for the interface text and for the text of the game data (names and descriptions), a runtime that changes the text on the page, and tools that show the coverage and get the official English text. English is the default. Its own `README.md` has the details. |
 | `dist/` | The output (git-ignored). |
 
 ## Build and check
@@ -120,8 +120,8 @@ The art of a local game client (`public/assets/local`) is not in the bucket.
 - **The storage of the socket backend.** `worker/` keeps its state in the memory only. A restart of its Durable
   Object stops each room.
 - **The limits of the socket backend.** `worker/` has no rate limit. Its `README.md` has the list.
-- **The new interface text of version 0.1.3.** 22 strings have no English translation. `node aldus/i18n/extract.mjs
-  --missing` shows them.
+- **The English text on the live page.** The live deploy has the interface text of version 0.1.2 only. The catalogs
+  of this folder now have each string of the interface and of the game data. A new deploy of the page shows them.
 
 ## Deploy
 

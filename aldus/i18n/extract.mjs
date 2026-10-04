@@ -4,6 +4,9 @@
 //   node aldus/i18n/extract.mjs            the coverage of every catalog of locales/
 //   node aldus/i18n/extract.mjs --missing  also every source string without a translation
 //
+// It shows two numbers for each locale: the interface text of the client's source (this file finds it), and the text
+// of the game data (gametext.mjs finds it: names and descriptions of operators, skills, items, enemies).
+//
 // The source text is the message id (translator.js), so there is no key file to keep: this script reads the text out
 // of public/index.html, public/js and shared/ again each time. A "fragment" is a run of text with Chinese in it between
 // the delimiters of the source (quotes, tags, `${…}`): what the page shows as one text node, or as one piece of one.
@@ -14,6 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createTranslator, CJK } from './translator.js';
+import { gameText } from './gametext.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.resolve(HERE, '..', '..');
@@ -64,12 +68,26 @@ export function coverage(catalog, fragments = extractFragments()) {
   return { total: fragments.length, translated: fragments.length - missing.length, missing };
 }
 
+/** How much of the text of the game data a catalog translates. `missing` has `[plain text, [file:field, …]]`. */
+export function gameCoverage(catalog, units = gameText()) {
+  const { translate } = createTranslator(catalog);
+  // a pattern can leave a part of a text as it is (a name that a player typed): for the game data that is not a translation
+  const missing = [...units].filter(([text]) => { const out = translate(text); return out == null || CJK.test(out); }).map(([text, u]) => [text, u.where]);
+  return { total: units.size, translated: units.size - missing.length, missing };
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const { buildCatalogs } = await import('../build.mjs');
   const fragments = extractFragments();
-  for (const f of fs.readdirSync(path.join(HERE, 'locales')).filter((n) => n.endsWith('.json')).sort()) {
-    const catalog = JSON.parse(fs.readFileSync(path.join(HERE, 'locales', f), 'utf8'));
+  const units = gameText();
+  const list = process.argv.includes('--missing');
+  const pct = (c) => `${c.translated} of ${c.total} (${((100 * c.translated) / c.total).toFixed(1)} %)`;
+  for (const [locale, catalog] of Object.entries(buildCatalogs())) {
     const c = coverage(catalog, fragments);
-    console.log(`${catalog.locale}: ${c.translated} of ${c.total} interface fragments (${((100 * c.translated) / c.total).toFixed(1)} %)`);
-    if (process.argv.includes('--missing')) for (const [t, files] of c.missing) console.log(`  ${t}\t${files[0]}`);
+    console.log(`${locale}: interface text ${pct(c)}`);
+    if (list) for (const [t, files] of c.missing) console.log(`  ${t}\t${files[0]}`);
+    const g = gameCoverage(catalog, units);
+    console.log(`${locale}: text of the game data ${pct(g)}`);
+    if (list) for (const [t, where] of g.missing) console.log(`  ${JSON.stringify(t)}\t${where[0]}`);
   }
 }

@@ -76,13 +76,13 @@
   "层）": "stacks)",
   "盟约效果": "Alliance effect",
   "成员": "Members",
-  "（变形同构体：视为本盟约成员）": "(Morphic Isomorph: counts as a member of this Alliance)",
+  "（变形同构体：视为本盟约成员）": "(Damazti Isomorph: counts as a member of this Alliance)",
   "（本局禁用）": "(disabled this run)",
   "（在场）": "(on field)",
   "（整备区）": "(Bench)",
   "同构": "Isomorph",
-  "机变": "Supplement",
-  "机变阶段": "Supplement Phase",
+  "机变": "Improv",
+  "机变阶段": "Improv Phase",
   "选择一项": "Choose one",
   "倒计时结束后仍未选定将自动分配": "If nothing is chosen when the timer ends, one is assigned automatically",
   "选择一项（无时间限制）": "Choose one (no time limit)",
@@ -159,11 +159,11 @@
   "全场": "Whole field",
   "基础": "Base",
   "当前作战中的实时数值（绿色为增益，红色为减益）": "Live values in the current battle (green = buff, red = debuff)",
-  "下一场作战开始时的数值：已计入装备、盟约层数、特质、策略与机变效果（不含技能与作战中的临时效果）": "Values at the start of the next battle: equipment, Alliance stacks, garrison traits, Strategy and Supplement effects included (skills and temporary combat effects excluded)",
+  "下一场作战开始时的数值：已计入装备、盟约层数、特质、策略与机变效果（不含技能与作战中的临时效果）": "Values at the start of the next battle: equipment, Alliance stacks, Attributes, Strategy and Improv effects included (skills and temporary combat effects excluded)",
   "实时": "Live",
   "开战时": "At battle start",
   "搭配以下装备时，携带者视为对应盟约的成员：": "With the equipment below, the wearer counts as a member of the matching Alliance:",
-  "变形同构体对应关系": "Morphic Isomorph pairings",
+  "变形同构体对应关系": "Damazti Isomorph pairings",
   "已搭配": "Paired",
   "生效中": "In effect",
   "暂未生效：需与上表中的一件装备一同携带": "Not in effect yet: must be worn together with one item from the table above",
@@ -171,11 +171,11 @@
   "一同装备时，携带者视为【": "worn together, the wearer counts as a member of [",
   "】成员": "]",
   "所属盟约": "Alliances",
-  "（变形同构体）": "(Morphic Isomorph)",
+  "（变形同构体）": "(Damazti Isomorph)",
   "：在场": ": on field",
   "，已激活": ", active",
   "，未激活": ", inactive",
-  "特质": "Garrison trait",
+  "特质": "Attribute",
   "生命上限": "Max HP",
   "攻击": "ATK",
   "防御": "DEF",
@@ -250,7 +250,7 @@
   "护卫": "Escort",
   "回合 · 即将迎击": "Round · incoming",
   "名敌人": "enemies",
-  "特训敌人·": "Special enemies ·",
+  "特训敌人·": "Tactical Training/",
   "暂无敌方情报": "No enemy intel yet",
   "回合 · 最终攻势": "Round · Final Assault",
   "战场：": "Battlefield:",
@@ -291,7 +291,7 @@
   "模拟即将开始": "The simulation is about to begin",
   "回合": "Round",
   "资金已到账": "Funds received",
-  "依次选择机变": "Choose Supplements in turn",
+  "依次选择机变": "Choose Improvs in turn",
   "休整期": "Rest Phase",
   "作战开始": "Combat begins",
   "各自行动阶段": "Everyone acts on their own",
@@ -567,8 +567,8 @@
   "战场固定": "Fixed battlefield",
   "确认本局信息": "Confirm run info",
   "未知领袖": "Unknown Leader",
-  "特训敌人": "Special enemies",
-  "本局没有特训敌人": "No special enemies this run",
+  "特训敌人": "Tactical Training enemies",
+  "本局没有特训敌人": "No Tactical Training enemies this run",
   "正在载入模拟数据…": "Loading simulation data…",
   "正在进入模拟…": "Entering the simulation…",
   "本局模拟已结束": "This simulation has ended",
@@ -677,7 +677,7 @@
   "战场固定为": "The battlefield is always",
   "独自调配资金与干员，以自己的节奏完成整场模拟。": "Manage Funds and operators alone and finish the whole simulation at your own pace.",
   "1 名博士": "1 Doctor",
-  "休整期与机变阶段不限时": "No time limit in the Rest and Supplement Phases",
+  "休整期与机变阶段不限时": "No time limit in the Rest and Improv Phases",
   "同盟模拟": "Team Simulation",
   "与至多": "Team up with up to",
   "名博士组成同盟，共享干员池，联防协作抵御敌潮。": "Doctors, share one operator pool, and Unite to hold back the enemy tide.",
@@ -762,7 +762,7 @@
   "准备就绪后，创建者即可开始模拟": "Once everyone is ready the host can start",
   "仅限 1 名博士": "1 Doctor only",
   "，满足条件时进入隐秘核心": "; the Hidden Core opens when its condition is met",
-  "独立模拟中休整期与机变阶段不限时": "In a Solo Simulation the Rest and Supplement Phases have no time limit",
+  "独立模拟中休整期与机变阶段不限时": "In a Solo Simulation the Rest and Improv Phases have no time limit",
   "仍有博士未准备就绪": "Some Doctors are not ready",
   "开始模拟": "Start simulation",
   "准备连接": "Preparing to connect",
@@ -778,8 +778,8 @@
   "字）": "characters)",
   "非官方同人复刻 · 游戏素材版权归 上海鹰角网络 / Yostar 所有": "Unofficial fan remake · game assets © Hypergryph / Yostar",
   "标准模拟": "Standard",
-  "险境模拟": "Hazard",
-  "绝境模拟": "Desperate",
+  "险境模拟": "Perilous",
+  "绝境模拟": "Dire",
   "终极模拟": "Ultimate",
   "结算": "Settlement",
   "模拟结束": "Simulation over",
@@ -860,19 +860,55 @@
   "叙拉古": "Siracusa",
   "卡西米尔": "Kazimierz",
   "精准": "Precision",
-  "迅捷": "Swiftness",
-  "灵巧": "Dexterity",
+  "迅捷": "Swift",
+  "灵巧": "Agile",
   "奥术": "Arcane",
-  "坚守": "Steadfast",
-  "助力": "Assist",
+  "坚守": "Durable",
+  "助力": "Aid",
   "远见": "Foresight",
-  "奇迹": "Miracle",
+  "奇迹": "Marvel",
   "投资人": "Investor",
   "突袭": "Raid",
-  "不屈": "Unyielding",
+  "不屈": "Resilient",
   "协防干员": "Co-defense operator",
   "独行": "Lone",
-  "绝技": "Signature"
+  "绝技": "Signature",
+  "观战中": "Spectating",
+  "观战中 · 点击左侧成员头像切换查看": "Spectating · click a member's avatar on the left to switch",
+  "以观战者身份进入：不占博士席位，只能观看（每个同盟最多": "Enter as a spectator: no Doctor seat, watch only (at most",
+  "名，模拟进行中也可进入）": "per team; you can also enter during a simulation)",
+  "将该博士移出同盟": "Remove this Doctor from the team",
+  "移出该博士": "Remove this Doctor",
+  "观战席": "Spectator seats",
+  "移出观战者": "Remove spectator",
+  "移出该观战者": "Remove this spectator",
+  "入座": "Take a seat",
+  "移出同盟": "Remove from team",
+  "确定将「": "Remove “",
+  "」移出同盟吗？对方可以凭同盟密钥重新加入。": "” from the team? They can join again with the team key.",
+  "移出": "Remove",
+  "观战中 · 不占博士席位，模拟开始后可切换观看各位博士": "Spectating · no Doctor seat; once the simulation starts you can switch between the Doctors",
+  "名成员": "members",
+  "观战中，可点击左侧成员头像前往查看": "Spectating: click a member's avatar on the left to watch",
+  "继续整备": "Keep preparing",
+  "还有": "You still have",
+  "资金未使用。休整期结束时，本回合的剩余资金将清零。确定准备就绪吗？": "unspent Funds. When the Rest Phase ends, the Funds left this round are lost. Ready anyway?",
+  "离开观战席并返回大厅，本局模拟不受影响；观战席空着时可以凭同盟密钥再次观战。": "Leave the spectator seat and go back to the lobby. The simulation goes on; while a spectator seat is free you can spectate again with the team key.",
+  "观战中无法进行该操作": "You cannot do that while spectating",
+  "离开观战": "Leave spectating",
+  "部署干员，准备迎敌": "Deploy operators and get ready",
+  "标准": "Standard",
+  "完美": "Perfect",
+  "精打细算玩偶": "Thrifty Doll",
+  "险境": "Perilous",
+  "绝境": "Dire",
+  "终极": "Ultimate",
+  "AUTOPILOT // AI 托管": "AUTOPILOT // AI",
+  "卫戍协议：盟约": "Stronghold Protocol<@title.colon>: </><@title.em>Alliance</>",
+  "特异": "Special",
+  "飞行": "Flying",
+  "频次": "Frequency",
+  "元素": "Elements"
  },
  "patterns": [
   [
@@ -938,6 +974,66 @@
   [
    "^(.+)只能部署在召唤者攻击范围内，整备区已满，下回合返还$",
    "$1 deploys only inside its summoner's attack range; the Bench is full, so it returns next round"
+  ],
+  [
+   "^剩余\\s*(\\d+)\\s*秒$",
+   "$1 s left"
+  ],
+  [
+   "^([一两二三四五六七八九十\\d]+)场作战$",
+   "$1 battles"
+  ],
+  [
+   "^接下来\\s*([一两二三四五六七八九十\\d]+)(场作战)?$",
+   "The next $1 battles"
+  ],
+  [
+   "^([^：，。；\\n]{1,16})：获得([^，。；：\\n]{1,24})$",
+   "$1: gained $2"
+  ],
+  [
+   "^获得([^，。；：\\n]{1,24})$",
+   "Gained $1"
+  ],
+  [
+   "^AI·(.+)$",
+   "AI·$1"
+  ],
+  [
+   "^目标生命值\\s*(\\d+)，结算时扣除\\s*(\\d+)\\s*点$",
+   "LP $1; $2 LP deducted at settlement"
+  ],
+  [
+   "^目标生命值\\s*(\\d+)，联防中，结算时扣除至多\\s*(\\d+)\\s*点$",
+   "LP $1; Unite: at most $2 LP deducted at settlement"
+  ],
+  [
+   "^目标生命值\\s*(\\d+)：本回合已有\\s*(\\d+)\\s*个以上敌人进入蓝门，结算时扣除\\s*(\\d+)\\s*点（每回合至多\\s*(\\d+)\\s*点）$",
+   "LP $1: more than $2 enemies entered the blue gate this round; $3 LP deducted at settlement (at most $4 LP per round)"
+  ],
+  [
+   "^目标生命值\\s*(\\d+)：本回合已有\\s*(\\d+)\\s*个敌人进入蓝门，结算时扣除\\s*(\\d+)\\s*点（每回合至多\\s*(\\d+)\\s*点）$",
+   "LP $1: $2 enemies entered the blue gate this round; $3 LP deducted at settlement (at most $4 LP per round)"
+  ],
+  [
+   "^每位博士有\\s*(\\d+)\\s*秒$",
+   "Each Doctor has $1 s"
+  ],
+  [
+   "^将\\s*(\\d+)\\s*名干员的技能与模组恢复为默认配置？$",
+   "Restore the skills and modules of $1 Operators to the defaults?"
+  ],
+  [
+   "^·\\s*(\\d+)\\s*阶$",
+   "· Tier $1"
+  ],
+  [
+   "^之后还有\\s*(\\d+)\\s*项$",
+   "$1 more after this"
+  ],
+  [
+   "^(\\d+)\\s*个$",
+   "$1"
   ]
  ]
 }

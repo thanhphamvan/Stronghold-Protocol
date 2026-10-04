@@ -12,11 +12,20 @@
 // node the last text the GAME wrote is kept as its source, apart from what this module wrote over it; a node whose text
 // is not what this module wrote was changed by the game, and is translated again.
 //
+// A description of the game data has styled pieces (a value in green, a term): the game draws it as one element of the
+// class `rt` with text nodes, <span> elements and <br> elements in it (public/js/ui/gameComponents.js RichText). Such
+// an element is translated as one sentence, and each piece of the translation goes into the node of the page that has
+// the same place (translator.js place). No node is added, moved or removed: the game still owns each one.
+//
+// The interface has a few sentences of the same kind, with a word in an element of its own (the title: 卫戍协议<span>：
+// </span><em>盟约</em>). Such an element is translated as one sentence too, when the catalog has that sentence as a
+// whole and its translation has a styled piece for each element.
+//
 // The game data (/data/*.json) is never translated: the simulation reads Chinese text in it for its rules
 // (shared/loadoutRecord.js), and the browser's battle must equal the server's. Only what is drawn is localized.
 
 import catalogs from './catalog.js';
-import { createTranslator, negotiate, CJK } from './translator.js';
+import { createTranslator, negotiate, place, CJK } from './translator.js';
 
 /** The language of the game's source text. */
 const SOURCE = 'zh';
@@ -35,6 +44,10 @@ if (query) read(() => localStorage.setItem(STORE_KEY, locale));
 
 const translator = locale === SOURCE ? null : createTranslator(catalogs[locale]);
 const translate = translator ? translator.translate : () => null;
+const rich = translator ? translator.rich : () => null;
+const sentence = translator ? translator.sentence : () => null;
+/** The class of the element that RichText of the game makes. */
+const RICH_CLASS = 'rt';
 
 /** text node → the last text the game wrote into it */
 const sources = new WeakMap();
@@ -63,9 +76,67 @@ function write(node, text) {
   if (node.data !== text) node.data = text;
 }
 
+/** The rich text element that `el` is, or is a styled piece of; else null. */
+function richRoot(el) {
+  if (el.classList.contains(RICH_CLASS)) return el;
+  const up = el.parentNode;
+  return el.tagName === 'SPAN' && up && up.nodeType === 1 && up.classList.contains(RICH_CLASS) ? up : null;
+}
+
+/**
+ * The pieces of an element, in order: a text node, the text node of an element that holds only that node (a styled
+ * piece), a line break. null when the element has a child of another shape.
+ */
+function slotsOf(root) {
+  const out = [];
+  for (let n = root.firstChild; n; n = n.nextSibling) {
+    if (n.nodeType === 3) out.push({ node: n, styled: false });
+    else if (n.nodeType !== 1) continue;
+    else if (n.tagName === 'BR') out.push({ br: true });
+    else if (n.childNodes.length === 1 && n.firstChild.nodeType === 3) out.push({ node: n.firstChild, styled: true });
+    else return null;
+  }
+  return out;
+}
+
+/**
+ * Translate a sentence of the interface that has a word in an element of its own, when the catalog has the sentence as
+ * a whole. @returns {boolean} false: the caller translates node by node
+ */
+function localizeSentence(root) {
+  if (!root || root.nodeType !== 1 || skipped(root)) return false;
+  const slots = slotsOf(root);
+  if (!slots || !slots.some((s) => s.styled) || !slots.some((s) => !s.br && !s.styled)) return false;
+  const whole = sentence(slots.map((s) => (s.br ? '\n' : sourceOf(s.node))).join(''));
+  if (whole == null) return false;
+  const texts = place(slots, whole);
+  slots.forEach((s, i) => { if (!s.br) write(s.node, texts[i]); });
+  return true;
+}
+
+/** Translate a rich text element as one sentence. @returns {boolean} false: not a rich text, the caller goes on */
+function localizeRich(root) {
+  const slots = slotsOf(root);
+  if (!slots) return false;
+  const sources = slots.map((s) => (s.br ? '\n' : sourceOf(s.node)));
+  const whole = rich(sources.join(''));
+  if (whole != null) {
+    const texts = place(slots, whole);
+    slots.forEach((s, i) => { if (!s.br) write(s.node, texts[i]); });
+    return true;
+  }
+  // no translation of the sentence: each piece by itself (a name, a number with a unit)
+  slots.forEach((s, i) => { if (!s.br) write(s.node, translate(sources[i]) ?? sources[i]); });
+  return true;
+}
+
 /** Translate the text of `parent`: as one string when it holds text only, else node by node. */
 function localize(parent) {
   if (!parent || parent.nodeType !== 1 || skipped(parent)) return;
+  const root = richRoot(parent);
+  if (root && localizeRich(root)) return;
+  // the sentence that this element is, or is a word of
+  if (localizeSentence(parent) || (parent.childNodes.length === 1 && localizeSentence(parent.parentNode))) return;
   const kids = parent.childNodes;
   let textOnly = kids.length > 1;
   for (let i = 0; i < kids.length && textOnly; i++) if (kids[i].nodeType !== 3) textOnly = false;
