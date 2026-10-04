@@ -120,9 +120,6 @@ The art of a local game client (`public/assets/local`) is not in the bucket.
 - **The storage of the socket backend.** `worker/` keeps its state in the memory only. A restart of its Durable
   Object stops each room.
 - **The limits of the socket backend.** `worker/` has no rate limit. Its `README.md` has the list.
-- **The English text on the live page.** The live deploy has the interface text of version 0.1.2 only. The catalogs
-  of this folder now have each string of the interface and of the game data. A new deploy of the page shows them.
-
 ## Deploy
 
 The steps that change a live system follow the `aldus-heron-deploy-env` skill, with `aldus -C aldus -e production`
@@ -139,8 +136,9 @@ aldus -C aldus -e production deploy --build -m "what changed"
 - **The storage:** `stronghold` in Mouseion holds the builds, under `builds/<deploy>/`. It is shared, read and
   write, with the account of the app, `stronghold-imprint@vikala.io`.
 - **The secrets:** `mouseion-token`. The imprint has no blocks, so it has no Heron key.
-- **The deploy that is live:** `01M448CH8MCN97QXJ1GGV9Z4HN`, on 2026-10-04. Its source is version 0.1.3 of the
-  original project. It has the i18n layer (English is the default locale) and the art from the bucket.
+- **The deploy that is live:** `01M44DZQCCERGVYW04CDVXB4SB`, on 2026-10-04, from commit `704c1e0`. Its source is
+  version 0.1.3 of the original project. It has the art from the bucket and the i18n layer: English is the default
+  locale, for the interface text and for the text of the game data.
 - **The socket backend:** the Worker `stronghold-ws` of `aldus/worker`, with the route
   `stronghold.apps.vikala.io/ws`. Version `ee0b194f-4465-4d84-b173-2d37f007f159`, deployed on 2026-10-04. Its engine
   and its lobby are version 0.1.3. Its state is in the memory only.
@@ -150,6 +148,7 @@ aldus -C aldus -e production deploy --build -m "what changed"
   manifest is in the bucket.
 - **Checked in a browser on 2026-10-04:** a solo match plays to the battle of round 2. The Spine models, the images,
   the sounds and the fonts come from the bucket, with no refused request. No script of the game breaks the policy.
+  The room, the briefing, the strategies and the Rest Phase have no Chinese text.
   One script that is not part of the game is refused: the analytics beacon that Cloudflare adds to pages of this zone.
 - **Checked with the conformance test on 2026-10-04:** the live Worker gives the same frames as the Node server of
   version 0.1.3 for the 78 steps of the script.
